@@ -8,8 +8,7 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage'),
+      require('karma-mocha-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
@@ -25,20 +24,25 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/unit-tests'),
+      dir: require('path').join(__dirname, './coverage/my-first-project'),
       subdir: '.',
       reporters: [
         { type: 'html' },
         { type: 'text-summary' }
       ]
     },
-    reporters: ['progress', 'kjhtml'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
+    reporters: ['mocha'],
+    logLevel: config.LOG_ERROR,
+    autoWatch: false,
+    singleRun: true,
+    browserNoActivityTimeout: 40000,
+    browsers: ['ChromeHeadless'],
+    customLaunchers: {
+    ChromeHeadlessCI: {
+    base: 'ChromeHeadless',
+    flags: ['--no-sandbox']
+  }
+},
     restartOnFileChange: true
   });
 };
