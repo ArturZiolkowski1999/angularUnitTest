@@ -1,0 +1,40 @@
+name: CI_NAME
+
+on: push
+
+jobs:
+  Pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v3
+    - name: self test action
+      uses: ./
+  Test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache-dependency-path: subdir/package.json
+      - run: npm install -g npm@latest
+      - run: npm cache clean --force
+      - run: npm rm -rf node_modules && rm package-lock.json
+      - run: npm install
+      - run: npm install karma-mocha-reporter --save-dev
+      - run: npm run test-ci
+  Eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci # or yarn install
+      - uses: sibiraj-s/action-eslint@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
+          eslint-args: '--ignore-path=.gitignore --quiet'
+          extensions: 'js,jsx,ts,tsx'
+          annotations: true

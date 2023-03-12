@@ -3,6 +3,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+
+  let component = new AppComponent();
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -32,4 +35,9 @@ describe('AppComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.content span')?.textContent).toContain('unitTests app is running!');
   });
+
+  xit('should return alert message', () => {
+    expect(component.ShowMessage("Hello")).toBe("HelloWorld");
+  });
+  
 });
